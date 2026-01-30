@@ -222,7 +222,7 @@ const ResultCard = ({ experiment, index }: ResultCardProps) => {
                           <iframe
                             width="100%"
                             height="100%"
-                            src="https://www.youtube.com/embed/jNQXAC9IVRw"
+                            src="https://www.youtube.com/embed/o2ixldvyyN8"
                             title="Explanatory Video"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
