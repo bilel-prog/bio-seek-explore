@@ -218,14 +218,16 @@ const ResultCard = ({ experiment, index }: ResultCardProps) => {
 
                     {videoGenerated && (
                       <div className="space-y-4">
-                        <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center border border-border/50">
-                          <div className="text-center space-y-2">
-                            <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mx-auto">
-                              <Video className="h-6 w-6 text-secondary" />
-                            </div>
-                            <p className="text-sm font-medium">Video Ready</p>
-                            <p className="text-xs text-muted-foreground">Demo Mode - Preview Only</p>
-                          </div>
+                        <div className="aspect-video rounded-lg overflow-hidden border border-border/50">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube.com/embed/jNQXAC9IVRw"
+                            title="Explanatory Video"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
                         </div>
                         <div className="flex gap-2">
                           <Button variant="outline" className="flex-1" onClick={() => {
@@ -239,9 +241,6 @@ const ResultCard = ({ experiment, index }: ResultCardProps) => {
                             Download
                           </Button>
                         </div>
-                        <p className="text-xs text-center text-muted-foreground">
-                          In production, this would generate a real AI-powered explanatory video.
-                        </p>
                       </div>
                     )}
                   </div>
