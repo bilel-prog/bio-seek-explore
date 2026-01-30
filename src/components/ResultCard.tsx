@@ -1,6 +1,15 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, ExternalLink, Beaker, Dna, Target, Calendar, User, Building } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, Beaker, Dna, Target, Calendar, User, Building, Video, Loader2, Sparkles } from "lucide-react";
 import { BiologicalExperiment } from "@/data/demoData";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface ResultCardProps {
   experiment: BiologicalExperiment;
@@ -9,6 +18,9 @@ interface ResultCardProps {
 
 const ResultCard = ({ experiment, index }: ResultCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  const [videoGenerated, setVideoGenerated] = useState(false);
+  const [videoDialogOpen, setVideoDialogOpen] = useState(false);
 
   const scorePercent = Math.round(experiment.similarityScore * 100);
   const scoreColor = scorePercent >= 80 ? "text-secondary" : scorePercent >= 60 ? "text-primary" : "text-accent";
@@ -130,6 +142,112 @@ const ResultCard = ({ experiment, index }: ResultCardProps) => {
                 View publication: {experiment.metadata.doi}
               </a>
             )}
+
+            {/* Generate Explanatory Video Button */}
+            <div className="mt-4">
+              <Dialog open={videoDialogOpen} onOpenChange={setVideoDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="inline-flex items-center gap-2 border-secondary/50 text-secondary hover:bg-secondary/10"
+                  >
+                    <Video className="h-4 w-4" />
+                    <Sparkles className="h-3 w-3" />
+                    Generate Explanatory Video
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <Video className="h-5 w-5 text-secondary" />
+                      Generate Explanatory Video
+                    </DialogTitle>
+                    <DialogDescription>
+                      Create an AI-powered video explanation of this experiment's methodology and findings.
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <div className="space-y-4 py-4">
+                    {!isGeneratingVideo && !videoGenerated && (
+                      <div className="space-y-4">
+                        <div className="p-4 rounded-lg bg-muted/50 border border-border/50">
+                          <h4 className="font-medium text-sm mb-2">{experiment.title}</h4>
+                          <p className="text-xs text-muted-foreground line-clamp-2">
+                            {experiment.description}
+                          </p>
+                        </div>
+                        <div className="text-xs text-muted-foreground space-y-1">
+                          <p>• Video will explain key methodology</p>
+                          <p>• Highlights shared features and findings</p>
+                          <p>• Approx. 30-60 second duration</p>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            setIsGeneratingVideo(true);
+                            // Simulate video generation
+                            setTimeout(() => {
+                              setIsGeneratingVideo(false);
+                              setVideoGenerated(true);
+                            }, 3000);
+                          }}
+                          className="w-full bg-secondary hover:bg-secondary/90"
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Generate Video
+                        </Button>
+                      </div>
+                    )}
+
+                    {isGeneratingVideo && (
+                      <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                        <div className="relative">
+                          <div className="w-16 h-16 rounded-full border-4 border-secondary/20 border-t-secondary animate-spin" />
+                          <Video className="h-6 w-6 text-secondary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                        </div>
+                        <div className="text-center">
+                          <p className="font-medium text-sm">Generating video...</p>
+                          <p className="text-xs text-muted-foreground">This may take a few moments</p>
+                        </div>
+                        <div className="w-full max-w-xs">
+                          <div className="h-2 bg-muted rounded-full overflow-hidden">
+                            <div className="h-full bg-secondary animate-pulse" style={{ width: '60%' }} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {videoGenerated && (
+                      <div className="space-y-4">
+                        <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center border border-border/50">
+                          <div className="text-center space-y-2">
+                            <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mx-auto">
+                              <Video className="h-6 w-6 text-secondary" />
+                            </div>
+                            <p className="text-sm font-medium">Video Ready</p>
+                            <p className="text-xs text-muted-foreground">Demo Mode - Preview Only</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button variant="outline" className="flex-1" onClick={() => {
+                            setVideoGenerated(false);
+                            setVideoDialogOpen(false);
+                          }}>
+                            Close
+                          </Button>
+                          <Button className="flex-1 bg-secondary hover:bg-secondary/90">
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Download
+                          </Button>
+                        </div>
+                        <p className="text-xs text-center text-muted-foreground">
+                          In production, this would generate a real AI-powered explanatory video.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       )}
