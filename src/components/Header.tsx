@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Dna, Search, Info, FlaskConical } from "lucide-react";
+import { Dna, Search, Info, FlaskConical, Beaker } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
@@ -57,6 +57,17 @@ const Header = () => {
             >
               <Info className="h-4 w-4" />
               Architecture
+            </Link>
+            <Link
+              to="/experiment-builder"
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive("/experiment-builder")
+                  ? "bg-secondary/10 text-secondary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              <Beaker className="h-4 w-4" />
+              Builder
             </Link>
           </nav>
 
